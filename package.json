@@ -13,10 +13,10 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "node node_modules/@playwright/test/cli.js test",
     "licenses": "node scripts/licenses.mjs",
-    "story:validate": "node scripts/story-with-overrides.mjs validate",
-    "story:build": "node scripts/story-with-overrides.mjs build",
+    "story:validate": "node scripts/story-with-wechat-chat.mjs validate",
+    "story:build": "node scripts/story-with-wechat-chat.mjs build",
     "story:preview": "npm run dev",
-    "story:test": "node scripts/story-with-overrides.mjs test"
+    "story:test": "node scripts/story-with-wechat-chat.mjs test"
   },
   "dependencies": {
     "@tiptap/react": "^3.0.0",

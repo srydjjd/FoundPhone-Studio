@@ -1,0 +1,34 @@
+{
+  "contacts": [
+    {
+      "id": "chat-cat-contact",
+      "name": "猫",
+      "phone": "",
+      "avatar": "",
+      "bio": ""
+    }
+  ],
+  "chats": [
+    {
+      "id": "wechat-chat-cat-september-13",
+      "app": "wechat",
+      "title": "猫",
+      "participants": ["owner", "chat-cat-contact"],
+      "messages": [
+        {"id":"wechat-cat-2026-09-13-01","body":"你人死哪了？不是和你说人多要跟紧点？","senderId":"chat-cat-contact","time":"2026-09-13 15:00"},
+        {"id":"wechat-cat-2026-09-13-02","body":"我就是看到有家店衣服还可以就想着去看看嘛。","senderId":"owner","time":"2026-09-13 15:01"},
+        {"id":"wechat-cat-2026-09-13-03","body":"我回家就下单一个儿童防走失手环","senderId":"chat-cat-contact","time":"2026-09-13 15:02"},
+        {"id":"wechat-cat-2026-09-13-04","body":"这不对吧我也不是儿童啊","senderId":"owner","time":"2026-09-13 15:03"},
+        {"id":"wechat-cat-2026-09-13-05","body":"你应该买条狗链","senderId":"owner","time":"2026-09-13 15:04"},
+        {"id":"wechat-cat-2026-09-13-06","body":"早上选帽子的时候还说自己是鱿鱼，怎么下午又变狗了？","senderId":"chat-cat-contact","time":"2026-09-13 15:05"},
+        {"id":"wechat-cat-2026-09-13-07","body":"你到底是猪是狗还是鱿鱼","senderId":"chat-cat-contact","time":"2026-09-13 15:06"},
+        {"id":"wechat-cat-2026-09-13-08","body":"我是你的亲亲男朋友呀。🥺","senderId":"owner","time":"2026-09-13 15:07"},
+        {"id":"wechat-cat-2026-09-13-09","body":"🖕🏻","senderId":"chat-cat-contact","time":"2026-09-13 15:08"},
+        {"id":"wechat-cat-2026-09-13-10","body":"oh my love，咱们结婚吧~","senderId":"owner","time":"2026-09-13 15:09"},
+        {"id":"wechat-cat-2026-09-13-11","body":"💍","senderId":"owner","time":"2026-09-13 15:10"},
+        {"id":"wechat-cat-2026-09-13-12","body":"。三分钟内我在停车场看不见你你就自己走路回去","senderId":"chat-cat-contact","time":"2026-09-13 15:11"},
+        {"id":"wechat-cat-2026-09-13-13","body":"张峻豪已抵达负一楼！","senderId":"owner","time":"2026-09-13 15:12"}
+      ]
+    }
+  ]
+}

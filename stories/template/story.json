@@ -5,7 +5,7 @@
   "description": "仅用于界面测试，不含剧情",
   "revision": 3,
   "phone": {
-    "owner": "机主",
+    "owner": "SHUN",
     "date": "2026-10-25",
     "time": "09:41",
     "battery": 94,
@@ -212,16 +212,34 @@
     {
       "id": "test-chat-messenger",
       "app": "messenger",
-      "title": "测试会话",
+      "title": "顺丰速运",
       "participants": [
-        "owner",
-        "test-contact"
-      ],
+      "owner",
+      "sf-express"
+    ],
       "messages": [
-        {
-          "id": "test-message-messenger",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
+    {
+      "id": "msg-sf-express-delivered",
+      "body": "【顺丰】您好，您的快件已送达，放置在快递货架上，请及时取件，如有疑问可联系派件员：130XXXXXXXX",
+      "senderId": "sf-express",
+      "time": "2026-10-25 08:32"
+         }
+       ]
+     },
+     {
+      "id": "chat-zto-express-delivery",
+      "app": "messages",
+      "title": "中通快递",
+      "participants": [
+      "owner",
+      "zto-express"
+    ], 
+      "messages": [
+    {
+     "id": "msg-zto-express-delivered",
+     "body": "【中通】您的包裹已送达，请尽快领取。",
+     "senderId": "zto-express",
+     "time": "2026-10-25 09:05"
         }
       ]
     },
@@ -597,7 +615,7 @@
       {
         "id": "x-post-2026-10-21",
         "title": "10月21日",
-        "body": "张极，好兄弟一辈子！",
+        "body": "张极说他可以帮我藏戒指。好兄弟，一辈子！",
         "time": "2026-10-21 09:00",
         "sender": "7",
         "kind": "text",

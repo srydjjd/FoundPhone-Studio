@@ -28,9 +28,28 @@ if (storyPath !== templatePath) {
     const contentAdditions = JSON.parse(
       readFileSync("stories/template/content-additions.json", "utf8"),
     );
+
     base.revision = (base.revision || 1) + 1;
-    base.contacts = [...(base.contacts || []), ...chatAdditions.contacts];
-    base.chats = [...(base.chats || []), ...chatAdditions.chats];
+    base.contacts = (base.contacts || []).filter(
+      (contact) => !contact.id.startsWith("test-"),
+    );
+    base.chats = (base.chats || []).filter((chat) => !chat.id.startsWith("test-"));
+    base.content = Object.fromEntries(
+      Object.entries(base.content || {})
+        .map(([app, items]) => [
+          app,
+          (Array.isArray(items) ? items : []).filter(
+            (item) =>
+              !item.id.startsWith("test-") &&
+              item.title !== "测试内容" &&
+              !String(item.body || "").startsWith("这是一条测试"),
+          ),
+        ])
+        .filter(([, items]) => Array.isArray(items) && items.length > 0),
+    );
+
+    base.contacts = [...base.contacts, ...chatAdditions.contacts];
+    base.chats = [...base.chats, ...chatAdditions.chats];
     base.content = { ...base.content, ...contentAdditions.content };
     const mergedPath = join(temporaryDirectory, "story.json");
     writeFileSync(mergedPath, JSON.stringify(base, null, 2) + "\n");

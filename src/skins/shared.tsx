@@ -96,7 +96,7 @@ export function Tabs({
 export function SearchBox({
   value,
   set,
-  placeholder = "搜��",
+  placeholder = "搜索",
 }: {
   value: string;
   set: (s: string) => void;

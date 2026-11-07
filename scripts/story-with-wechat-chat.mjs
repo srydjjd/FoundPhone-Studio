@@ -1,40 +1,46 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve, join } from "node:path";
-import { spawn } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 const args = process.argv.slice(2);
 const mode = args[0] || "validate";
-const template = resolve("stories/template/story.json");
-const selected = resolve(args[1] || process.env.STORY_FILE || template);
+const storyPath = resolve(
+  args[1] || process.env.STORY_FILE || "stories/template/story.json",
+);
+const templatePath = resolve("stories/template/story.json");
 
-if (selected !== template) {
-  const child = spawn(process.execPath, ["scripts/story.mjs", ...args], {
+// Keep custom story paths unchanged; only layer the fork's authoring data onto
+// the existing default template used by preview and production builds.
+if (storyPath !== templatePath) {
+  const result = spawnSync(process.execPath, ["scripts/story.mjs", ...args], {
     stdio: "inherit",
     env: process.env,
   });
-  child.on("exit", (code) => process.exit(code ?? 1));
+  process.exitCode = result.status ?? 1;
 } else {
-  const dir = await mkdtemp(join(tmpdir(), "foundphone-story-"));
+  const temporaryDirectory = mkdtempSync(join(tmpdir(), "foundphone-story-"));
   try {
-    const story = JSON.parse(await readFile(template, "utf8"));
+    const base = JSON.parse(readFileSync(templatePath, "utf8"));
     const additions = JSON.parse(
-      await readFile("stories/template/wechat-chat.json", "utf8"),
+      readFileSync("stories/template/wechat-chat.json", "utf8"),
     );
-    story.revision = (story.revision || 1) + 1;
-    story.contacts = [...(story.contacts || []), ...additions.contacts];
-    story.chats = [...(story.chats || []), ...additions.chats];
-    const tempStory = join(dir, "story.json");
-    await writeFile(tempStory, JSON.stringify(story, null, 2) + "\n");
-    const child = spawn(
+    const contentAdditions = JSON.parse(
+      readFileSync("stories/template/content-additions.json", "utf8"),
+    );
+    base.revision = (base.revision || 1) + 1;
+    base.contacts = [...(base.contacts || []), ...additions.contacts];
+    base.chats = [...(base.chats || []), ...additions.chats];
+    base.content = { ...base.content, ...contentAdditions.content };
+    const mergedPath = join(temporaryDirectory, "story.json");
+    writeFileSync(mergedPath, JSON.stringify(base, null, 2) + "\n");
+    const result = spawnSync(
       process.execPath,
-      ["scripts/story.mjs", mode, tempStory],
+      ["scripts/story.mjs", mode, mergedPath],
       { stdio: "inherit", env: process.env },
     );
-    process.exitCode = await new Promise((resolveExit) =>
-      child.on("exit", (code) => resolveExit(code ?? 1)),
-    );
+    process.exitCode = result.status ?? 1;
   } finally {
-    await rm(dir, { recursive: true, force: true });
+    rmSync(temporaryDirectory, { recursive: true, force: true });
   }
 }

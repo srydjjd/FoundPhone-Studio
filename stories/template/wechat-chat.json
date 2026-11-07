@@ -6,6 +6,13 @@
       "phone": "",
       "avatar": "",
       "bio": ""
+    },
+    {
+      "id": "chat-zhangzeyu-contact",
+      "name": "张泽禹",
+      "phone": "",
+      "avatar": "",
+      "bio": ""
     }
   ],
   "chats": [
@@ -40,6 +47,24 @@
         {"id":"wechat-cat-2026-09-13-23","body":"哪错了，我戴了眼镜没看错时间","senderId":"chat-cat-contact","time":"2026-09-13 15:22"},
         {"id":"wechat-cat-2026-09-13-24","body":"是我错了呀＞＜","senderId":"owner","time":"2026-09-13 15:23"},
         {"id":"wechat-cat-2026-09-13-25","body":"已到达负一楼并带着奶茶一杯来请罪！","senderId":"owner","time":"2026-09-13 15:24"}
+      ]
+    },
+    {
+      "id": "wechat-chat-zhangzeyu-2026-10-23",
+      "app": "wechat",
+      "title": "张泽禹",
+      "participants": ["owner", "chat-zhangzeyu-contact"],
+      "messages": [
+        {"id":"wechat-zhangzeyu-2026-10-23-01","body":"1","senderId":"owner","time":"2026-10-23 10:00"},
+        {"id":"wechat-zhangzeyu-2026-10-23-02","body":"？","senderId":"chat-zhangzeyu-contact","time":"2026-10-23 10:01"},
+        {"id":"wechat-zhangzeyu-2026-10-23-03","body":"我打算和左航当求婚","senderId":"owner","time":"2026-10-23 10:02"},
+        {"id":"wechat-zhangzeyu-2026-10-23-04","body":"？？？","senderId":"chat-zhangzeyu-contact","time":"2026-10-23 10:03"},
+        {"id":"wechat-zhangzeyu-2026-10-23-05","body":"就今天","senderId":"owner","time":"2026-10-23 10:04"},
+        {"id":"wechat-zhangzeyu-2026-10-23-06","body":"你能不能帮我拖一下他让他别那么快回来","senderId":"owner","time":"2026-10-23 10:05"},
+        {"id":"wechat-zhangzeyu-2026-10-23-07","body":"？","senderId":"chat-zhangzeyu-contact","time":"2026-10-23 10:06"},
+        {"id":"wechat-zhangzeyu-2026-10-23-08","body":"这么重要的事你居然现在才和我说？","senderId":"chat-zhangzeyu-contact","time":"2026-10-23 10:07"},
+        {"id":"wechat-zhangzeyu-2026-10-23-09","body":"500，打你卡上","senderId":"owner","time":"2026-10-23 10:08"},
+        {"id":"wechat-zhangzeyu-2026-10-23-10","body":"小事兄弟，包我身上","senderId":"chat-zhangzeyu-contact","time":"2026-10-23 10:09"}
       ]
     }
   ]

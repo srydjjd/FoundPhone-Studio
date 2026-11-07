@@ -22,15 +22,15 @@ if (storyPath !== templatePath) {
   const temporaryDirectory = mkdtempSync(join(tmpdir(), "foundphone-story-"));
   try {
     const base = JSON.parse(readFileSync(templatePath, "utf8"));
-    const additions = JSON.parse(
+    const chatAdditions = JSON.parse(
       readFileSync("stories/template/wechat-chat.json", "utf8"),
     );
     const contentAdditions = JSON.parse(
       readFileSync("stories/template/content-additions.json", "utf8"),
     );
     base.revision = (base.revision || 1) + 1;
-    base.contacts = [...(base.contacts || []), ...additions.contacts];
-    base.chats = [...(base.chats || []), ...additions.chats];
+    base.contacts = [...(base.contacts || []), ...chatAdditions.contacts];
+    base.chats = [...(base.chats || []), ...chatAdditions.chats];
     base.content = { ...base.content, ...contentAdditions.content };
     const mergedPath = join(temporaryDirectory, "story.json");
     writeFileSync(mergedPath, JSON.stringify(base, null, 2) + "\n");

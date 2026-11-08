@@ -12,6 +12,7 @@ export function createWork(title = "雨停之前"): Work {
     updatedAt: Date.now(),
     phone: {
       owner: "林知夏",
+      avatar: "",
       passcode: "",
       wallpaper: "sage",
       theme: "light",

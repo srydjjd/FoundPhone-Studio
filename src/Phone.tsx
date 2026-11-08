@@ -138,6 +138,10 @@ function PhoneRuntime({
   const [pinOpen, setPinOpen] = useState(false);
   const [quickCamera, setQuickCamera] = useState(false);
   const [keyboard, setKeyboard] = useState(false);
+  const [forcedReply, setForcedReply] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
   const [recent, setRecent] = useState<string[]>([]);
   const appSnapshots = useRef(new Map<string, HTMLElement>());
   const [banner, setBanner] = useState("");
@@ -246,6 +250,17 @@ function PhoneRuntime({
   const event = (event: string, target: string) => {
     if (!creator) update(dispatch(work, runtimeRef.current, event, target));
   };
+  const sendForcedReply = () => {
+    if (!forcedReply) return;
+    const current = runtimeRef.current;
+    const next = current.unlocked.includes(forcedReply.id)
+      ? current
+      : { ...current, unlocked: [...current.unlocked, forcedReply.id] };
+    runtimeRef.current = next;
+    update(dispatch(work, next, "reply", forcedReply.id));
+    setForcedReply(null);
+    setKeyboard(false);
+  };
   const captureApp = () => {
     if (!app) return;
     const current = shell.current?.querySelector<HTMLElement>(".app-screen");
@@ -291,6 +306,7 @@ function PhoneRuntime({
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
+  const customWallpaper = work.phone.wallpaper.startsWith("data:image/");
   const plugin = getApp(app);
   useEffect(() => {
     const count = s.notifications.length;
@@ -318,7 +334,12 @@ function PhoneRuntime({
     >
       <KeyboardContext.Provider value={setKeyboard}>
         <div
-          className={`phone-screen wallpaper-${work.phone.wallpaper} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
+          className={`phone-screen ${customWallpaper ? "has-custom-wallpaper" : `wallpaper-${work.phone.wallpaper}`} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
+          style={
+            customWallpaper
+              ? { backgroundImage: `url("${work.phone.wallpaper}")` }
+              : undefined
+          }
           data-app={app}
           onDragStart={(e) => e.preventDefault()}
           onPointerDown={(e) => {
@@ -449,8 +470,21 @@ function PhoneRuntime({
                   items={[
                     ...(work.data[app] ?? []),
                     ...(s.messages[app] ?? []),
-                  ]}
+                  ].map((i) =>
+                    !creator &&
+                    app !== "twitter" &&
+                    work.phone.avatar &&
+                    i.outgoing
+                      ? { ...i, avatar: work.phone.avatar }
+                      : i,
+                  )}
                   creator={creator}
+                  ownerAvatar={work.phone.avatar}
+                  onComposeReply={(text, id) => {
+                    if (creator) return;
+                    setForcedReply({ id, text });
+                    setKeyboard(true);
+                  }}
                   state={s}
                   onRead={(id) => event("read", id)}
                   onEdit={(item) => onEdit?.(app, item)}
@@ -767,7 +801,16 @@ function PhoneRuntime({
               </div>
             </div>
           )}
-          {keyboard && <DeviceKeyboard close={() => setKeyboard(false)} />}
+          {keyboard && (
+            <DeviceKeyboard
+              close={() => {
+                setKeyboard(false);
+                setForcedReply(null);
+              }}
+              forcedText={forcedReply?.text}
+              onSend={forcedReply ? sendForcedReply : undefined}
+            />
+          )}
           {loadError && (
             <button className="runtime-error" onClick={() => setLoadError("")}>
               {loadError}
@@ -866,6 +909,8 @@ function AppContent({
   onBack,
   onSettings,
   onUi,
+  ownerAvatar,
+  onComposeReply,
   work,
 }: {
   app: AppPlugin;
@@ -879,6 +924,8 @@ function AppContent({
   onBack: () => void;
   onSettings?: () => void;
   onUi?: (key: string, value: UiValue) => void;
+  ownerAvatar?: string;
+  onComposeReply?: (text: string, id: string) => void;
   work: Work;
 }) {
   const [detail, setDetail] = useState<Item | null>(null);
@@ -988,6 +1035,8 @@ function AppContent({
             <Skin
               appId={app.id}
               owner={work.phone.owner}
+              ownerAvatar={ownerAvatar}
+              onComposeReply={onComposeReply}
               virtualTime={state.time}
               ui={state.ui?.[app.id]}
               onUi={creator ? undefined : onUi}

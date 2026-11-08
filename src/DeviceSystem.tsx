@@ -404,20 +404,39 @@ export function ControlCenter({
     </motion.div>
   );
 }
-export function DeviceKeyboard({ close }: { close: () => void }) {
+export function DeviceKeyboard({
+  close,
+  forcedText,
+  onSend,
+}: {
+  close: () => void;
+  forcedText?: string;
+  onSend?: () => void;
+}) {
+  const forced = forcedText !== undefined;
   const [value, setValue] = useState(""),
     [shift, setShift] = useState(false),
     [numbers, setNumbers] = useState(false);
+  const text = forced ? forcedText : value;
+  const type = (next: string) => {
+    if (!forced) setValue(next);
+  };
   return (
     <div className="device-keyboard" role="dialog" aria-label="屏幕键盘">
       <div className="keyboard-draft">
         <input
           autoFocus
           aria-label="消息草稿"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={text}
+          readOnly={forced}
+          onChange={(e) => type(e.target.value)}
           placeholder="输入消息"
         />
+        {onSend && (
+          <button className="keyboard-send" aria-label="发送" onClick={onSend}>
+            发送
+          </button>
+        )}
         <button aria-label="收起键盘" onClick={close}>
           <ChevronDown />
         </button>
@@ -425,7 +444,7 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
       <div className="keyboard-candidates">
         {(value ? [value, "好的", "知道了"] : ["我", "你", "好的"]).map(
           (v, i) => (
-            <button key={i} onClick={() => setValue(value + v)}>
+            <button key={i} onClick={() => type(value + v)}>
               {v}
             </button>
           ),
@@ -448,7 +467,7 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
           {[...row].map((k) => (
             <button
               key={k}
-              onClick={() => setValue(value + (shift ? k.toUpperCase() : k))}
+              onClick={() => type(value + (shift ? k.toUpperCase() : k))}
             >
               {shift ? k.toUpperCase() : k}
             </button>
@@ -457,7 +476,7 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
             <button
               className="key-special"
               aria-label="退格"
-              onClick={() => setValue(value.slice(0, -1))}
+              onClick={() => type(value.slice(0, -1))}
             >
               <Delete size={20} />
             </button>
@@ -468,7 +487,7 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
         <button onClick={() => setNumbers(!numbers)}>
           {numbers ? "ABC" : "123"}
         </button>
-        <button className="key-space" onClick={() => setValue(value + " ")}>
+        <button className="key-space" onClick={() => type(value + " ")}>
           空格
         </button>
         <button onClick={close}>完成</button>

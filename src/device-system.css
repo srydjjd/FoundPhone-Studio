@@ -18,6 +18,11 @@
   letter-spacing: -0.25px;
   touch-action: pan-y;
 }
+.ios18 .phone-screen.has-custom-wallpaper {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .ios18 .status-bar {
   z-index: 80;
   height: 59px;
@@ -745,6 +750,12 @@
   border: 1px solid #ddd;
   border-radius: 17px;
   padding: 5px 12px;
+}
+.ios18 .keyboard-send {
+  color: #0a84ff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 0 6px;
 }
 .ios18 .keyboard-candidates {
   height: 39px;

@@ -37,6 +37,8 @@ export type SkinProps = {
   onUi?: (key: string, value: UiValue) => void;
   appId?: string;
   owner?: string;
+  ownerAvatar?: string;
+  onComposeReply?: (text: string, id: string) => void;
   virtualTime?: string;
   name: string;
   items: Item[];
@@ -176,6 +178,9 @@ export function WeChatSkin(p: SkinProps) {
   const posts = p.items.filter(
     (i) => i.folder === "朋友圈" || i.kind === "post",
   );
+  const pending = p.thread
+    ? p.items.filter((i) => i.title === p.thread).at(-1)
+    : undefined;
   return (
     <div
       className="wechat-ui independent-skin"
@@ -283,7 +288,24 @@ export function WeChatSkin(p: SkinProps) {
             onItem={p.onItem}
             onRead={p.onRead}
           />
-          <Compose creator={p.creator} onAdd={p.onAdd} />
+          {pending?.meta.awaitReply === "true" && p.onComposeReply ? (
+            <div className="skin-compose story-prompt">
+              <button
+                className="story-prompt-field"
+                aria-label="输入消息"
+                onClick={() =>
+                  p.onComposeReply?.(
+                    pending.meta.replyText || "",
+                    pending.meta.replyId || "",
+                  )
+                }
+              >
+                输入消息
+              </button>
+            </div>
+          ) : (
+            <Compose creator={p.creator} onAdd={p.onAdd} />
+          )}
         </>
       ) : moments ? (
         <div className="wx-moments">
@@ -297,7 +319,7 @@ export function WeChatSkin(p: SkinProps) {
               className="wx-moment-post"
               onClick={() => p.onItem(i)}
             >
-              <Avatar name={i.sender} />
+              <Avatar name={i.sender} src={i.avatar} />
               <div>
                 <strong>{i.sender}</strong>
                 <p>{i.body}</p>
@@ -419,7 +441,7 @@ export function WeChatSkin(p: SkinProps) {
           ) : (
             <>
               <div className="wx-profile">
-                <Avatar name={p.owner || "机主"} />
+                <Avatar name={p.owner || "机主"} src={p.ownerAvatar} />
                 <div>
                   <h2>{p.owner || "机主"}</h2>
                   <small>微信号：未设置</small>
@@ -925,7 +947,7 @@ export function InstagramSkin(p: SkinProps) {
         ) : (
           <>
             <div className="ig-profile">
-              <Avatar name={posts[0]?.sender ?? "我"} round />
+              <Avatar name={posts[0]?.sender ?? "我"} src={posts[0]?.avatar} round />
               <div>
                 <strong>{posts.length}</strong>
                 <small>帖子</small>
